@@ -3,6 +3,7 @@ import java.util.List;
 
 public class DigitalModifier {
 
+
     public List<Character> generateList(String code) throws CodeFormatException {
 
         List<Character> playerCode = new ArrayList<>();
@@ -18,7 +19,7 @@ public class DigitalModifier {
         playerCode.add(digi4);
 
         for (int i = 0; i < 4; i++) {
-            for (int j = i; j < 3 - i; j++) {
+            for (int j = i + 1; j < 4; j++) {
                 if (playerCode.get(i) == playerCode.get(j)) {
                     throw new CodeFormatException();
                 }
@@ -28,9 +29,13 @@ public class DigitalModifier {
         return playerCode;
     }
 
-    public char generateDigital(char char1, char char2) {
-        char digital = (char) ((int) (Math.random() * (char2 - char1 + 1)) + char1);
-        return digital;
-    }
 
+    public String generateString(List<Character> code) {
+        String codeString = "";
+        for (char digit : code) {
+            codeString += digit;
+        }
+
+        return codeString;
+    }
 }
