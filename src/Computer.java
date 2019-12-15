@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Computer {
-    DigitalGenerator digitalGenerator;
-    NumGetter numGetter;
+    public DigitalGenerator digitalGenerator;
+    public NumGetter numGetter;
 
     public Computer() {
         digitalGenerator = new DigitalGenerator();

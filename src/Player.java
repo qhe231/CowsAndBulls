@@ -10,7 +10,6 @@ public class Player {
 
     public Player() {
         digitalModifier = new DigitalModifier();
-
         turn = 1;
 
     }
