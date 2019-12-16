@@ -1,9 +1,12 @@
+import javax.print.DocFlavor;
 import java.sql.SQLOutput;
 import java.util.*;
 
 public class Player {
     public DigitalModifier digitalModifier;
     public Computer computer;
+    public char firstChar;
+    public char secondChar;
     public static final int TURNS = 7;
     public int turn;
 
@@ -11,6 +14,8 @@ public class Player {
     public Player() {
         digitalModifier = new DigitalModifier();
         turn = 1;
+        firstChar = '0';
+        secondChar = '9';
 
     }
 
@@ -22,7 +27,7 @@ public class Player {
         } else {
             computer = new Computer();
         }
-        List<Character> computerCode = computer.generateCode();
+        List<Character> computerCode = computer.generateCode(firstChar, secondChar);
         action(playerCode, computerCode);
     }
 
@@ -69,7 +74,7 @@ public class Player {
 
     private void action(List<Character> playerCode, List<Character> computerCode) {
         List<Character> playerGuessCode = playerGuess();
-        List<Character> computerGuessCode = computer.guessCode();
+        List<Character> computerGuessCode = computer.guessCode(firstChar, secondChar);
         beat(playerCode, computerCode, playerGuessCode, computerGuessCode);
     }
 

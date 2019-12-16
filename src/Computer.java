@@ -10,10 +10,10 @@ public class Computer {
         numGetter = new NumGetter();
     }
 
-    public List<Character> generateCode() {
+    public List<Character> generateCode(char char1, char char2) {
         List<Character> computerCode = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            char digi = digitalGenerator.generateDigital('0', '9');
+            char digi = digitalGenerator.generateDigital(char1, char2);
             if (computerCode.contains(digi)) {
                 i--;
             } else {
@@ -23,8 +23,8 @@ public class Computer {
         return computerCode;
     }
 
-    public List<Character> guessCode(){
-        List<Character> computerCode = generateCode();
+    public List<Character> guessCode(char char1, char char2){
+        List<Character> computerCode = generateCode(char1, char2);
         return computerCode;
     }
 
