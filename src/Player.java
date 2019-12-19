@@ -1,3 +1,5 @@
+import jdk.swing.interop.SwingInterOpUtils;
+
 import javax.print.DocFlavor;
 import java.sql.SQLOutput;
 import java.util.*;
@@ -5,27 +7,26 @@ import java.util.*;
 public class Player {
     public DigitalModifier digitalModifier;
     public Computer computer;
-    public char firstChar;
-    public char secondChar;
+    public static final char firstChar = '0';
+    public static final char secondChar = '9';
+//    public static final char firstChar = 'A';
+//    public static final char secondChar = 'F';
     public static final int TURNS = 7;
-    public int turn;
+    public static int turn;
 
 
     public Player() {
         digitalModifier = new DigitalModifier();
         turn = 1;
-        firstChar = '0';
-        secondChar = '9';
-
     }
 
     private void start() {
         List<Character> playerCode = getPlayerCode();
         boolean chooseSmarterComputer = chooseComputer();
         if (chooseSmarterComputer) {
-            computer = new SmarterComputer();
+            computer = new SmarterComputer(firstChar, secondChar);
         } else {
-            computer = new Computer();
+            computer = new Computer(firstChar, secondChar);
         }
         List<Character> computerCode = computer.generateCode(firstChar, secondChar);
         action(playerCode, computerCode);
@@ -39,20 +40,23 @@ public class Player {
         System.out.println("- - -");
 
         try {
-            checkCodeFormat(wholePlayerCode);
+
             List<Character> playerCode = digitalModifier.generateList(wholePlayerCode);
+            checkCodeFormat(playerCode);
             return playerCode;
-        } catch (NumberFormatException | CodeFormatException e) {
+        } catch (CodeFormatException e) {
             System.out.println("Your code needs to be 4 different digits from 0 – 9");
+//            System.out.println("Your guess needs to be 4 different digits from A – F");
             return getPlayerCode();
         }
 
     }
 
-    private void checkCodeFormat(String wholePlayerCode) throws CodeFormatException {
-        int codeInt = Integer.parseInt(wholePlayerCode);
-        if (codeInt > 9999 || codeInt < 0) {
-            throw new CodeFormatException();
+    private void checkCodeFormat(List<Character> playerCode) throws CodeFormatException {
+        for (Character digit : playerCode) {
+            if (digit < firstChar || digit > secondChar) {
+                throw new CodeFormatException();
+            }
         }
     }
 
@@ -82,12 +86,13 @@ public class Player {
         System.out.print("You guess: ");
         String playerGuessCode = Keyboard.readInput();
         try {
-            checkCodeFormat(playerGuessCode);
             List<Character> guess = digitalModifier.generateList(playerGuessCode);
+            checkCodeFormat(guess);
             return guess;
 
-        } catch (NumberFormatException | CodeFormatException e) {
+        } catch (CodeFormatException e) {
             System.out.println("Your guess needs to be 4 different digits from 0 – 9");
+//            System.out.println("Your guess needs to be 4 different digits from A – F");
             return playerGuess();
         }
     }
@@ -95,7 +100,7 @@ public class Player {
     private void beat(List<Character> playerCode, List<Character> computerCode,
                       List<Character> playerGuessCode, List<Character> computerGuessCode) {
 
-        boolean youWin = computer.getCowsAndBulls(computerCode, playerGuessCode);
+        boolean youWin = computer.getCowsAndBulls(computerCode, playerGuessCode, 1);
         if (youWin) {
             System.out.println("You win! :)");
             return;
@@ -105,7 +110,7 @@ public class Player {
         String computerCodeString = digitalModifier.generateString(computerGuessCode);
         System.out.println("\n" + "Computer guess: " + computerCodeString);
 
-        boolean computerWins = computer.getCowsAndBulls(computerGuessCode, playerCode);
+        boolean computerWins = computer.getCowsAndBulls(computerGuessCode, playerCode, 2);
         if (computerWins) {
             System.out.println("Computer wins! :(");
         } else if (turn == TURNS) {

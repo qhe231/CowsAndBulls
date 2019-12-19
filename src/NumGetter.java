@@ -1,9 +1,11 @@
 import java.util.List;
 
 public class NumGetter {
+    int bulls;
+    int cows;
 
     public int getBulls(List<Character> code, List<Character> guess) {
-        int bulls = 0;
+        bulls = 0;
         for (int i = 0; i < 4; i++) {
             if (code.get(i) == guess.get(i)) {
                 bulls++;
@@ -13,12 +15,14 @@ public class NumGetter {
     }
 
     public int getCows(List<Character> code, List<Character> guess) {
-        int cows = 0;
+        int total = 0;
         for (int i = 0; i < 4; i++) {
             if (code.contains(guess.get(i))){
-                cows++;
+                total++;
             }
         }
+
+        cows = total-bulls;
 
         return cows;
     }

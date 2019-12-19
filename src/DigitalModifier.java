@@ -6,6 +6,10 @@ public class DigitalModifier {
 
     public List<Character> generateList(String code) throws CodeFormatException {
 
+        if (code.length() != 4){
+            throw new CodeFormatException();
+        }
+
         List<Character> playerCode = new ArrayList<>();
 
         char digi1 = code.charAt(0);
