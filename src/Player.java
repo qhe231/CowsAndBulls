@@ -1,4 +1,3 @@
-import jdk.swing.interop.SwingInterOpUtils;
 
 import javax.print.DocFlavor;
 import java.sql.SQLOutput;
@@ -7,10 +6,8 @@ import java.util.*;
 public class Player {
     public DigitalModifier digitalModifier;
     public Computer computer;
-    public static final char firstChar = '0';
-    public static final char secondChar = '9';
-//    public static final char firstChar = 'A';
-//    public static final char secondChar = 'F';
+    public char firstChar;
+    public char secondChar;
     public static final int TURNS = 7;
     public static int turn;
 
@@ -21,6 +18,14 @@ public class Player {
     }
 
     private void start() {
+        boolean numberMode = chooseMode();
+        if (numberMode) {
+            firstChar = '0';
+            secondChar = '9';
+        } else {
+            firstChar = 'A';
+            secondChar = 'F';
+        }
         List<Character> playerCode = getPlayerCode();
         boolean chooseSmarterComputer = chooseComputer();
         if (chooseSmarterComputer) {
@@ -30,6 +35,22 @@ public class Player {
         }
         List<Character> computerCode = computer.generateCode(firstChar, secondChar);
         action(playerCode, computerCode);
+    }
+
+    private boolean chooseMode() {
+        System.out.println("Please choose the game mode: \n 1. number 0-9 \n 2. letter A-F");
+        try {
+            int mode = Integer.parseInt(Keyboard.readInput());
+            if (mode < 1 || mode > 2) {
+                throw new CodeFormatException();
+            } else {
+                return mode == 1;
+            }
+
+        } catch (NumberFormatException | CodeFormatException e) {
+            System.out.println("Wrong choice!");
+            return chooseMode();
+        }
     }
 
 
@@ -45,8 +66,11 @@ public class Player {
             checkCodeFormat(playerCode);
             return playerCode;
         } catch (CodeFormatException e) {
-            System.out.println("Your code needs to be 4 different digits from 0 – 9");
-//            System.out.println("Your guess needs to be 4 different digits from A – F");
+            if (firstChar == '0') {
+                System.out.println("Your code needs to be 4 different digits from 0 – 9");
+            } else {
+                System.out.println("Your guess needs to be 4 different digits from A – F");
+            }
             return getPlayerCode();
         }
 
@@ -91,8 +115,11 @@ public class Player {
             return guess;
 
         } catch (CodeFormatException e) {
-            System.out.println("Your guess needs to be 4 different digits from 0 – 9");
-//            System.out.println("Your guess needs to be 4 different digits from A – F");
+            if (firstChar == '0') {
+                System.out.println("Your code needs to be 4 different digits from 0 – 9");
+            } else {
+                System.out.println("Your guess needs to be 4 different digits from A – F");
+            }
             return playerGuess();
         }
     }

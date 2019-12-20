@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,9 +10,24 @@ public class SmarterComputer extends Computer {
 
     public SmarterComputer(char char1, char char2) {
         super(char1, char2);
-        getAllAnswers(char1, char2);
+        allPossibleAnswers = getAllAnswers(char1, char2);
+//        allPossibleAnswers = new ArrayList<>();
+//        generateAllAnswers(new ArrayList<>());
 
     }
+
+//    private void generateAllAnswers(ArrayList<Character> answer) {
+//        if (answer.size() == 4) {
+//            allPossibleAnswers.add(answer);
+//        } else {
+//            for (char  c = char1; c <= char2; c++){
+//                if (!answer.contains(c)){
+//                    answer.add(c);
+//                    generateAllAnswers(answer);
+//                }
+//            }
+//        }
+//    }
 
     @Override
     public List<Character> guessCode(char char1, char char2) {
@@ -19,7 +35,7 @@ public class SmarterComputer extends Computer {
             Iterator<ArrayList<Character>> myIterator = allPossibleAnswers.iterator();
             while (myIterator.hasNext()) {
                 boolean keep = getCowsAndBulls(lastGuess, myIterator.next(), 3);
-                if (!keep){
+                if (!keep) {
                     myIterator.remove();
                 }
             }
@@ -34,8 +50,8 @@ public class SmarterComputer extends Computer {
         return lastGuess;
     }
 
-    private void getAllAnswers(char char1, char char2) {
-         allPossibleAnswers = new ArrayList<>();
+    private List<ArrayList<Character>> getAllAnswers(char char1, char char2) {
+        List<ArrayList<Character>> allAnswers = new ArrayList<>();
 
         for (char firstChar = char1; firstChar <= char2; firstChar++) {
             for (char secondChar = char1; secondChar <= char2; secondChar++) {
@@ -55,11 +71,13 @@ public class SmarterComputer extends Computer {
                         possibleAnswer.add(secondChar);
                         possibleAnswer.add(thirdChar);
                         possibleAnswer.add(fourthChar);
-                        allPossibleAnswers.add(possibleAnswer);
+                        allAnswers.add(possibleAnswer);
                     }
                 }
 
             }
         }
+
+        return allAnswers;
     }
 }
